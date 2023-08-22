@@ -1,0 +1,44 @@
+syntax="proto3";
+
+option go_package = "github.com/lekht/bookwiki-grpc/internal/delivery/grpc/wiki_grpc";
+
+package wiki_grpc;
+
+service WikiHandler {
+  rpc GetBooksByAuthor (AuthorRequest) returns (BookListResponse) {}
+  rpc GetAuthorsByBook (BookRequest) returns (AuthorListResponse) {}
+}
+
+message ErrorMessage{
+  string message =1;
+}
+
+message AuthorRequest {
+  string author_name = 1;
+}
+
+message BookRequest {
+  string book_title = 1;
+}
+
+message Book {
+  int32 id = 1;
+  string title = 2;
+  int32 author_id = 3;
+}
+
+message Author {
+  int32 id = 1;
+  string author_name = 2;
+}
+
+message BookListResponse {
+  repeated Book books = 1;
+  repeated ErrorMessage error = 2;
+}
+
+message AuthorListResponse {
+  repeated Author authors = 1;
+  repeated ErrorMessage error = 2;
+}
+

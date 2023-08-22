@@ -1,7 +1,0 @@
-FROM mysql:latest
-
-COPY ./initdb/data.sql /tmp
-
-EXPOSE 3306
-
-CMD [ "mysqld", "--init-file=/tmp/data.sql" ]

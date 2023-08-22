@@ -2,8 +2,9 @@ package driver
 
 import (
 	"database/sql"
-	"errors"
 	"os"
+
+	"github.com/pkg/errors"
 
 	"github.com/go-sql-driver/mysql"
 )
@@ -17,17 +18,17 @@ func New() (*MySQL, error) {
 		User:   os.Getenv("MYSQL_USER"),
 		Passwd: os.Getenv("MYSQL_PASSWORD"),
 		Net:    "tcp",
-		Addr:   os.Getenv("MYSQL_HOST") + os.Getenv("MYSQL_PORT"),
+		Addr:   os.Getenv("MYSQL_HOST") + ":" + os.Getenv("MYSQL_PORT"),
 		DBName: os.Getenv("MYSQL_DATABASE"),
 	}
 	db, err := sql.Open("mysql", cfg.FormatDSN())
 	if err != nil {
-		return nil, errors.New("failed to connect to mysql")
+		return nil, errors.Wrap(err, "failed to connect to mysql")
 	}
 
 	err = db.Ping()
 	if err != nil {
-		return nil, errors.New("failed to ping db")
+		return nil, errors.Wrap(err, "failed to ping db")
 	}
 
 	return &MySQL{

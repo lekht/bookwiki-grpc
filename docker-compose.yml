@@ -1,38 +1,37 @@
-version: "3"
+version: "3.9"
 
 services:
-  # app:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   restart: always
-  #   ports:
-  #     - "8088:8088"
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-  #     MYSQL_USER: ${MYSQL_USER}
-  #     MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-  #     MYSQL_DATABASE: ${MYSQL_DATABASE}
-  #     MYSQL_PORT: ${MYSQL_PORT}
-  #     MYSQL_HOST: mysql
-  #   depends_on:
-  #     - mysql
-  #   command:
-  #     - ./wait-for-mysql.sh
-    
-  mysql:
+
+  app:
     build:
       context: .
-      dockerfile: MYSQL_Dockerfile
-    # container_name: mysql_db
-    environment:
-            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-            MYSQL_USER: ${MYSQL_USER}
-            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-            MYSQL_DATABASE: ${MYSQL_DATABASE}
-            MYSQL_PORT: ${MYSQL_PORT}
+      dockerfile: Dockerfile
     restart: always
     ports:
+      - "8088:8088"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_HOST: db
+    command:
+      - ./wait-for-mysql.sh
+    depends_on:
+      db:
+        condition: service_started
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      LANG: C.UTF-8
+    restart: always
+    volumes:
+      - ./initdb/data.sql:/docker-entrypoint-initdb.d/initdb.sql
+    ports:
       - "3306:3306"
-    expose:
-      - 3306

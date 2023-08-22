@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/lekht/bookwiki-grpc/internal/app"
@@ -17,5 +16,4 @@ func init() {
 
 func main() {
 	app.Run()
-	time.Sleep(time.Hour)
 }
