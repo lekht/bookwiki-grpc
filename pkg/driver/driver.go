@@ -13,6 +13,7 @@ type MySQL struct {
 	DB *sql.DB
 }
 
+// Регистрирует соединение с БД
 func New() (*MySQL, error) {
 	cfg := mysql.Config{
 		User:   os.Getenv("MYSQL_USER"),

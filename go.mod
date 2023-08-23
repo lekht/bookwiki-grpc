@@ -8,6 +8,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	google.golang.org/grpc v1.57.0
 	google.golang.org/protobuf v1.31.0
+	gopkg.in/DATA-DOG/go-sqlmock.v1 v1.3.0
 )
 
 require (

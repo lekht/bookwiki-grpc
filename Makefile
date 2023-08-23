@@ -1,14 +1,13 @@
 include .env
 export
 
-echo:
-	echo ${MYSQL_PORT}
+all: run testconn
 
 run:
-	docker-compose up --build 
+	docker-compose up --build -d
 
 stop:
 	docker-compose down -v
 
-conn:
-	mysql -h 127.0.0.1 -p=$$MYSQL_PORT -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+testconn:
+	bash ./check-mysql.sh

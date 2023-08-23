@@ -4,13 +4,19 @@ import (
 	"context"
 
 	"github.com/lekht/bookwiki-grpc/internal/delivery/grpc/wiki_grpc"
+	"github.com/lekht/bookwiki-grpc/internal/models"
 	"github.com/lekht/bookwiki-grpc/internal/usecase"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
+type WikiUsecase interface {
+	GetAuthorsByBook(book string) ([]models.Author, error)
+	GetBooksByAuthor(author string) ([]models.Book, error)
+}
+
 type server struct {
-	usecase usecase.WikiUsecase
+	usecase WikiUsecase
 	wiki_grpc.UnimplementedWikiHandlerServer
 }
 
@@ -24,6 +30,7 @@ func NewWikiServer(gserver *grpc.Server, u *usecase.Usecase) {
 	reflection.Register(gserver)
 }
 
+// Хэндлер, который принимает запрос в виде структуры с полем автора и возвращает книги этого автора
 func (s *server) GetBooksByAuthor(ctx context.Context, r *wiki_grpc.AuthorRequest) (*wiki_grpc.BookListResponse, error) {
 	author := r.GetAuthorName()
 
@@ -45,6 +52,7 @@ func (s *server) GetBooksByAuthor(ctx context.Context, r *wiki_grpc.AuthorReques
 	}, nil
 }
 
+// Хэндлер, который принимает запрос в виде структуры с полем названия книги и возвращает авторов
 func (s *server) GetAuthorsByBook(ctx context.Context, r *wiki_grpc.BookRequest) (*wiki_grpc.AuthorListResponse, error) {
 	book := r.GetBookTitle()
 

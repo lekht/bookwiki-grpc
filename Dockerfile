@@ -1,5 +1,5 @@
 FROM golang:latest as builder
-WORKDIR /app
+WORKDIR /service
 
 COPY go.mod ./
 COPY go.sum ./
@@ -8,17 +8,19 @@ RUN go mod download
 
 COPY ./ ./
 
-RUN go build -o app ./cmd/app/main.go
+RUN go test ./...
+
+RUN go build -o service ./cmd/service/service.go
 
 FROM ubuntu AS production
 
-WORKDIR /app
+WORKDIR /service
 
 RUN apt-get update
 RUN apt-get -y install mysql-client
 
-COPY --from=builder /app/app ./
-COPY --from=builder /app/wait-for-mysql.sh ./
-COPY --from=builder /app/.env ./
+COPY --from=builder /service/service ./
+COPY --from=builder /service/wait-for-mysql.sh ./
+COPY --from=builder /service/.env ./
 
 RUN chmod +x wait-for-mysql.sh

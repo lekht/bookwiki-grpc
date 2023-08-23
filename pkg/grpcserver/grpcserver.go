@@ -13,6 +13,7 @@ type GrpcServer struct {
 	notify  chan error
 }
 
+// Регистрирует grpc сервер и запускает прослушивание порта
 func New(grpcServer *grpc.Server, address string) *GrpcServer {
 	s := &GrpcServer{
 		srv:     grpcServer,

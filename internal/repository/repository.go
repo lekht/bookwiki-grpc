@@ -29,6 +29,7 @@ func New(db *driver.MySQL) *Repository {
 	return &Repository{db}
 }
 
+// Метод для получения авторов по названию книги из БД
 func (r *Repository) AuthorsByBook(book string) ([]models.Author, error) {
 	var authors []models.Author
 
@@ -54,6 +55,7 @@ func (r *Repository) AuthorsByBook(book string) ([]models.Author, error) {
 	return authors, nil
 }
 
+// Метод для получения из БД книг по имени автора
 func (r *Repository) BooksByAuthor(author string) ([]models.Book, error) {
 	var books []models.Book
 	rows, err := r.DB.Query(sqlBookByAuthor, author)

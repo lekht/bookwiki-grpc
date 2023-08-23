@@ -13,11 +13,6 @@ var (
 	errServerInternal = errors.New("server internal error")
 )
 
-type WikiUsecase interface {
-	GetAuthorsByBook(book string) ([]models.Author, error)
-	GetBooksByAuthor(author string) ([]models.Book, error)
-}
-
 type Usecase struct {
 	RepoUsecase
 }
@@ -31,6 +26,7 @@ func New(r *repository.Repository) *Usecase {
 	return &Usecase{r}
 }
 
+// Метод бизнеслогики по получения авторов книги
 func (u *Usecase) GetAuthorsByBook(book string) ([]models.Author, error) {
 
 	authors, err := u.AuthorsByBook(book)
@@ -46,6 +42,7 @@ func (u *Usecase) GetAuthorsByBook(book string) ([]models.Author, error) {
 	return authors, nil
 }
 
+// Метод бизнеслогики, обесечивающий получение книг по автору
 func (u *Usecase) GetBooksByAuthor(author string) ([]models.Book, error) {
 
 	books, err := u.BooksByAuthor(author)
